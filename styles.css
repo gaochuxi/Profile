@@ -370,6 +370,28 @@ h3 {
   line-height: 1.72;
 }
 
+.detail-note {
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.tag-cloud span {
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 .timeline {
   display: grid;
   gap: 12px;
@@ -389,6 +411,10 @@ h3 {
 
 .timeline-item p {
   margin: 0;
+}
+
+.timeline-item .detail-note {
+  margin-top: 10px;
 }
 
 .two-column {

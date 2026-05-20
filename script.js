@@ -11,7 +11,6 @@ const translations = {
       "Researcher in public administration and law, focusing on cyber law, IT law, data privacy, comparative legal systems, and public governance.",
     "hero.primary": "View Publications",
     "hero.secondary": "Email Me",
-    "hero.photo": "Photo coming soon",
     "hero.cardLabel": "Academic Profile",
     "hero.cardTitle": "Public Administration & Law",
     "hero.cardText":
@@ -119,7 +118,6 @@ const translations = {
       "公共管理与法学研究者，关注网络法、信息技术法、数据隐私、比较法制度与公共治理。",
     "hero.primary": "查看发表",
     "hero.secondary": "发送邮件",
-    "hero.photo": "照片即将加入",
     "hero.cardLabel": "学术主页",
     "hero.cardTitle": "公共管理与法学",
     "hero.cardText": "山东大学法学与公共管理双学士，公共管理硕士。",
@@ -214,7 +212,6 @@ const translations = {
       "公共管理與法學研究者，關注網路法、資訊科技法、資料隱私、比較法律制度與公共治理。",
     "hero.primary": "查看發表",
     "hero.secondary": "傳送郵件",
-    "hero.photo": "照片即將加入",
     "hero.cardLabel": "學術主頁",
     "hero.cardTitle": "公共管理與法學",
     "hero.cardText": "山東大學法學與公共管理雙學士，公共管理碩士。",

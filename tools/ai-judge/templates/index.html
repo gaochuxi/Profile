@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI 智慧法庭 | Chuxi Gao</title>
+    <link rel="stylesheet" href="./static/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="court-header">
+        <a class="brand" href="/">
+          <span class="brand-mark">AI</span>
+          <span>AI Smart Court</span>
+        </a>
+        <nav class="court-nav" aria-label="AI Smart Court navigation">
+          <button class="active" type="button" data-page-button="home">首页</button>
+          <button type="button" data-page-button="court">开庭审理</button>
+          <button type="button" data-page-button="about">关于系统</button>
+        </nav>
+      </header>
+
+      <main>
+        <section class="page-view hero-view active" data-page="home">
+          <div>
+            <p class="eyebrow">Legal AI Prototype</p>
+            <h1>赛博法庭，智慧裁决。</h1>
+            <p class="lead">
+              一个面向法律学习、研究和原型展示的 AI 辅助分析系统。输入案情，选择模型，生成结构化的参考分析。
+            </p>
+            <div class="actions">
+              <button class="primary-button" type="button" data-go-page="court">立即启动审理</button>
+              <button class="secondary-button" type="button" data-go-page="about">了解说明</button>
+            </div>
+          </div>
+          <aside class="preview-card">
+            <span>Judgment Draft</span>
+            <strong>案情核心 · 法律适用 · 分析意见 · 参考结论</strong>
+            <p>保持清晰、克制、可追溯的法律分析结构。</p>
+          </aside>
+        </section>
+
+        <section class="page-view court-grid" data-page="court">
+          <aside class="control-stack">
+            <div class="panel">
+              <label for="model">选择主审模型</label>
+              <select id="model">
+                <option value="">加载模型中...</option>
+              </select>
+            </div>
+
+            <div class="panel case-panel">
+              <label for="case">案情描述</label>
+              <textarea id="case" placeholder="请输入详细的案件经过、争议焦点和你希望分析的问题。"></textarea>
+              <button class="primary-button full" id="submit-case" type="button">提交并生成分析</button>
+            </div>
+          </aside>
+
+          <section class="result-panel">
+            <div class="result-header">
+              <span>AI Judgment Reference</span>
+              <h2>AI 判决参考</h2>
+            </div>
+            <div class="empty-state" id="empty-state">
+              请在左侧输入案情并提交。结果将以结构化法律分析形式显示在这里。
+            </div>
+            <div class="loading-state" id="loading-state" hidden>
+              <div class="spinner"></div>
+              <p>正在生成法律分析...</p>
+            </div>
+            <pre class="verdict" id="verdict" hidden></pre>
+          </section>
+        </section>
+
+        <section class="page-view about-view" data-page="about">
+          <p class="eyebrow">About</p>
+          <h1>关于 AI 智慧法庭</h1>
+          <p>
+            这是一个探索法律研究与人工智能结合方式的实验性工具。它可以帮助整理案情、提示争点、生成结构化分析，
+            但不能替代律师、法官或正式法律程序。
+          </p>
+          <p class="notice">免责声明：AI 输出仅供学习、研究和原型展示参考，不构成正式法律意见。</p>
+        </section>
+      </main>
+
+      <footer>© 2026 Chuxi Gao · AI Smart Court</footer>
+    </div>
+
+    <script>
+      const fallbackModels = [
+        "gpt-5.2",
+        "gpt-5.1",
+        "gpt-5",
+        "gpt-4o",
+        "gpt-4.1",
+        "deepseek-r1",
+        "deepseek-v3",
+        "gpt-4o-mini",
+        "gpt-3.5-turbo",
+      ];
+
+      const pageButtons = document.querySelectorAll("[data-page-button]");
+      const goPageButtons = document.querySelectorAll("[data-go-page]");
+      const pages = document.querySelectorAll("[data-page]");
+      const modelSelect = document.querySelector("#model");
+      const caseInput = document.querySelector("#case");
+      const submitButton = document.querySelector("#submit-case");
+      const emptyState = document.querySelector("#empty-state");
+      const loadingState = document.querySelector("#loading-state");
+      const verdict = document.querySelector("#verdict");
+
+      function setPage(pageName) {
+        pages.forEach((page) => page.classList.toggle("active", page.dataset.page === pageName));
+        pageButtons.forEach((button) => button.classList.toggle("active", button.dataset.pageButton === pageName));
+      }
+
+      function fillModels(models) {
+        modelSelect.innerHTML = "";
+        models.forEach((model) => {
+          const option = document.createElement("option");
+          option.value = model;
+          option.textContent = model;
+          modelSelect.appendChild(option);
+        });
+      }
+
+      async function fetchModels() {
+        try {
+          const response = await fetch("/api/models");
+          const data = await response.json();
+          fillModels(data.models && data.models.length ? data.models : fallbackModels);
+        } catch (error) {
+          fillModels(fallbackModels);
+        }
+      }
+
+      function typeWriter(text, isError) {
+        verdict.textContent = "";
+        verdict.hidden = false;
+        verdict.classList.toggle("error", isError);
+        let index = 0;
+        const timer = setInterval(() => {
+          if (index < text.length) {
+            verdict.textContent += text.charAt(index);
+            index += 1;
+          } else {
+            clearInterval(timer);
+          }
+        }, isError ? 5 : 16);
+      }
+
+      async function submitCase() {
+        const description = caseInput.value.trim();
+        if (!description) {
+          emptyState.hidden = true;
+          loadingState.hidden = true;
+          typeWriter("案情描述过短，无法进行可靠分析。", true);
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "AI 正在分析...";
+        emptyState.hidden = true;
+        verdict.hidden = true;
+        loadingState.hidden = false;
+
+        try {
+          const response = await fetch("/api/judge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              case_description: description,
+              model_type: modelSelect.value,
+            }),
+          });
+          const data = await response.json();
+          loadingState.hidden = true;
+          typeWriter(data.verdict || "未收到有效分析结果。", false);
+        } catch (error) {
+          loadingState.hidden = true;
+          typeWriter("网络错误，无法连接服务器。", true);
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "提交并生成分析";
+        }
+      }
+
+      pageButtons.forEach((button) => button.addEventListener("click", () => setPage(button.dataset.pageButton)));
+      goPageButtons.forEach((button) => button.addEventListener("click", () => setPage(button.dataset.goPage)));
+      submitButton.addEventListener("click", submitCase);
+      fetchModels();
+    </script>
+  </body>
+</html>

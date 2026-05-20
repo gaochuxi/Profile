@@ -315,6 +315,10 @@ const translations = {
 const year = document.querySelector("#year");
 const languageButtons = document.querySelectorAll(".lang-button");
 const translatedNodes = document.querySelectorAll("[data-i18n]");
+const carouselImages = document.querySelectorAll(".carousel-image");
+const carouselDots = document.querySelectorAll(".carousel-dot");
+let activeSlide = 0;
+let carouselTimer;
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -343,3 +347,37 @@ languageButtons.forEach((button) => {
 });
 
 setLanguage(localStorage.getItem("profileLanguage") || "en");
+
+function showSlide(index) {
+  if (!carouselImages.length) {
+    return;
+  }
+
+  activeSlide = (index + carouselImages.length) % carouselImages.length;
+  carouselImages.forEach((image, imageIndex) => {
+    image.classList.toggle("is-active", imageIndex === activeSlide);
+  });
+  carouselDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activeSlide);
+  });
+}
+
+function startCarousel() {
+  if (carouselImages.length < 2) {
+    return;
+  }
+
+  window.clearInterval(carouselTimer);
+  carouselTimer = window.setInterval(() => {
+    showSlide(activeSlide + 1);
+  }, 4200);
+}
+
+carouselDots.forEach((dot) => {
+  dot.addEventListener("click", () => {
+    showSlide(Number(dot.dataset.slide));
+    startCarousel();
+  });
+});
+
+startCarousel();

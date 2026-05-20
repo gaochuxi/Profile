@@ -51,9 +51,16 @@
         </div>
 
         <aside class="profile-panel" aria-label="Profile summary">
-          <figure class="hero-photo">
-            <img src="./assets/images/chuxi-portrait.jpg" alt="Portrait of Chuxi Gao" />
-          </figure>
+          <div class="hero-photo carousel" aria-label="Chuxi Gao photo carousel">
+            <img class="carousel-image is-active" src="./assets/images/chuxi-portrait.jpg" alt="Portrait of Chuxi Gao" />
+            <img class="carousel-image" src="./assets/images/chuxi-full.jpg" alt="Chuxi Gao in a white suit" />
+            <img class="carousel-image" src="./assets/images/chuxi-candid.jpg" alt="A candid personal photo of Chuxi Gao" />
+            <div class="carousel-controls" aria-label="Photo carousel controls">
+              <button class="carousel-dot is-active" type="button" aria-label="Show portrait photo" data-slide="0"></button>
+              <button class="carousel-dot" type="button" aria-label="Show full-length photo" data-slide="1"></button>
+              <button class="carousel-dot" type="button" aria-label="Show candid photo" data-slide="2"></button>
+            </div>
+          </div>
           <div class="profile-card">
             <span class="profile-label" data-i18n="hero.cardLabel">Academic Profile</span>
             <strong data-i18n="hero.cardTitle">Public Administration & Law</strong>
@@ -62,15 +69,6 @@
             </p>
           </div>
         </aside>
-      </section>
-
-      <section class="photo-strip" aria-label="Personal photos">
-        <figure class="photo-tile tall">
-          <img src="./assets/images/chuxi-full.jpg" alt="Chuxi Gao in a white suit" />
-        </figure>
-        <figure class="photo-tile wide">
-          <img src="./assets/images/chuxi-candid.jpg" alt="A candid personal photo of Chuxi Gao" />
-        </figure>
       </section>
 
       <section class="stats-strip" aria-label="Profile highlights">

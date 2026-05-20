@@ -26,6 +26,9 @@ python3 app.py
 http://localhost:9001
 ```
 
+请从 `http://localhost:9001` 打开工具，而不是直接打开 `templates/index.html`。
+GitHub Pages 只能托管静态页面，不能运行 FastAPI 后端；如果从 GitHub Pages 打开前端，需要在页面里的“后端服务地址”填写一个已经部署并可访问的后端地址。
+
 ## 说明
 
 AI 输出仅供学习、研究和原型展示参考，不构成正式法律意见。

@@ -49,6 +49,14 @@
               </select>
             </div>
 
+            <div class="panel api-panel">
+              <label for="api-base">后端服务地址</label>
+              <input id="api-base" type="url" placeholder="例如：http://localhost:9001" />
+              <p>
+                GitHub Pages 或 file:// 只能展示前端，提交案情前需要先启动 FastAPI 后端。
+              </p>
+            </div>
+
             <div class="panel case-panel">
               <label for="case">案情描述</label>
               <textarea id="case" placeholder="请输入详细的案件经过、争议焦点和你希望分析的问题。"></textarea>
@@ -103,11 +111,29 @@
       const goPageButtons = document.querySelectorAll("[data-go-page]");
       const pages = document.querySelectorAll("[data-page]");
       const modelSelect = document.querySelector("#model");
+      const apiBaseInput = document.querySelector("#api-base");
       const caseInput = document.querySelector("#case");
       const submitButton = document.querySelector("#submit-case");
       const emptyState = document.querySelector("#empty-state");
       const loadingState = document.querySelector("#loading-state");
       const verdict = document.querySelector("#verdict");
+
+      function getDefaultApiBase() {
+        if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+          const isStaticGithubPage = window.location.hostname.endsWith("github.io");
+          const isTemplatePreview = window.location.pathname.includes("/templates/");
+          if (!isStaticGithubPage && !isTemplatePreview) {
+            return window.location.origin;
+          }
+        }
+        return localStorage.getItem("aiJudgeApiBase") || "http://localhost:9001";
+      }
+
+      function getApiBase() {
+        return (apiBaseInput.value || "").replace(/\/$/, "");
+      }
+
+      apiBaseInput.value = getDefaultApiBase();
 
       function setPage(pageName) {
         pages.forEach((page) => page.classList.toggle("active", page.dataset.page === pageName));
@@ -126,7 +152,7 @@
 
       async function fetchModels() {
         try {
-          const response = await fetch("/api/models");
+          const response = await fetch(`${getApiBase()}/api/models`);
           const data = await response.json();
           fillModels(data.models && data.models.length ? data.models : fallbackModels);
         } catch (error) {
@@ -172,13 +198,18 @@
               case_description: description,
               model_type: modelSelect.value,
             }),
+            mode: "cors",
           });
           const data = await response.json();
+          localStorage.setItem("aiJudgeApiBase", getApiBase());
           loadingState.hidden = true;
           typeWriter(data.verdict || "未收到有效分析结果。", false);
         } catch (error) {
           loadingState.hidden = true;
-          typeWriter("网络错误，无法连接服务器。", true);
+          typeWriter(
+            `无法连接后端服务：${getApiBase()}\n\n请确认：\n1. 已在 tools/ai-judge 目录运行 python3 app.py；\n2. 浏览器能打开该后端地址；\n3. 如果从 GitHub Pages 打开前端，请在左侧填写可访问的后端服务地址。`,
+            true
+          );
         } finally {
           submitButton.disabled = false;
           submitButton.textContent = "提交并生成分析";

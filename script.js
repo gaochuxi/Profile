@@ -97,7 +97,7 @@ const translations = {
     "tools.aiJudge.title": "AI Smart Court",
     "tools.aiJudge.body":
       "A FastAPI and Vue-based legal analysis tool that lets users select a model, describe a case, and receive a structured AI-generated judgment reference.",
-    "tools.aiJudge.preview": "Preview UI",
+    "tools.aiJudge.preview": "Run Locally",
     "tools.aiJudge.docs": "Read Docs",
     "sections.experienceKicker": "Experience",
     "sections.experienceTitle": "Practice and service",
@@ -219,7 +219,7 @@ const translations = {
     "tools.aiJudge.title": "AI 智慧法庭",
     "tools.aiJudge.body":
       "基于 FastAPI 与 Vue 的法律分析工具，支持选择模型、输入案情，并生成结构化 AI 判决参考。",
-    "tools.aiJudge.preview": "预览界面",
+    "tools.aiJudge.preview": "本地运行",
     "tools.aiJudge.docs": "查看说明",
     "sections.experienceKicker": "实践经历",
     "sections.experienceTitle": "法律实践与公共服务",
@@ -335,7 +335,7 @@ const translations = {
     "tools.aiJudge.title": "AI 智慧法庭",
     "tools.aiJudge.body":
       "基於 FastAPI 與 Vue 的法律分析工具，支援選擇模型、輸入案情，並生成結構化 AI 判決參考。",
-    "tools.aiJudge.preview": "預覽介面",
+    "tools.aiJudge.preview": "本地運行",
     "tools.aiJudge.docs": "查看說明",
     "sections.experienceKicker": "實踐經歷",
     "sections.experienceTitle": "法律實踐與公共服務",

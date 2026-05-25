@@ -26,8 +26,13 @@ python3 app.py
 http://localhost:9001
 ```
 
-请从 `http://localhost:9001` 打开工具，而不是直接打开 `templates/index.html`。
-GitHub Pages 只能托管静态页面，不能运行 FastAPI 后端；如果从 GitHub Pages 打开前端，需要在页面里的“后端服务地址”填写一个已经部署并可访问的后端地址。
+GitHub Pages 上可以打开静态前端入口：
+
+```text
+https://gaochuxi.github.io/Profile/tools/ai-judge/
+```
+
+但 GitHub Pages 不能运行 FastAPI 后端；如果从 GitHub Pages 打开前端，需要在页面里的“后端服务地址”填写一个已经部署并可访问的后端地址。本地调试时请填写 `http://localhost:9001`，并确保后端正在运行。
 
 ## 说明
 
